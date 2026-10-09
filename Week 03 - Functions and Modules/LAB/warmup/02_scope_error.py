@@ -2,8 +2,10 @@
 # Run it, read the last line, then fix it.
 
 def check(value, limit):
-    status = "OVER LIMIT" if value > limit else "OK"
+    if value > limit:
+        return "OVER LIMIT"  
+    else:
+        return "OK"
 
-check(87, 100)
+print(check(87, 100))
 
-print(status)
