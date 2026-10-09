@@ -49,8 +49,8 @@ def decide_winner(user_choice, computer_choice):
 
 user_choice=input("rock/paper/scissor : ")
 computer_choice=get_computer_choice()
-print(computer_choice)
+print(f"Computer : {computer_choice}")
 
 winner=decide_winner(user_choice, computer_choice)
-print(winner)
+print(f"Winner : {winner}")
 
