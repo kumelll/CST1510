@@ -1,15 +1,13 @@
+
 """
 RECORD CHECK  -  my version
 ===========================
 
 Name  :
-Lane  :  AI / Cyber / IT      (delete two)
+Lane  :  AI / Data Science
 Date  :
 
 Run it:   python template.py
-
-Work through the numbered sections in order. Each one tells you what it must do.
-Delete these instructions as you replace them with your code.
 """
 
 # ====================================================================== CLASS
@@ -23,7 +21,23 @@ Delete these instructions as you replace them with your code.
 #    Excellent : also add over_limit_count as a class-level running total -
 #                see the note below.
 
-# your class goes here
+class Record:
+    over_limit_count = 0
+
+    def __init__(self, label, value, limit):
+        """Store the record details."""
+        self.label = label
+        self.value = value
+        self.limit = limit
+
+    def status(self):
+        """Return the status based on the value and limit."""
+        if self.value >= self.limit:
+            return "OVER LIMIT"
+        elif self.value >= self.limit * 0.9:
+            return "WARNING"
+        else:
+            return "OK"
 
 
 # ==================================================================== RECORDS
@@ -35,7 +49,29 @@ Delete these instructions as you replace them with your code.
 #                lines from a file and returns a list of Record objects. Make
 #                your own data file, one record per line.
 
-records = []   # replace with your code
+def load_records(path):
+    """Read records from a file and return Record objects."""
+    loaded_records = []
+
+    with open(path, "r") as file:
+        for line in file:
+            label, value, limit = line.strip().split(",")
+            loaded_records.append(Record(label, float(value), float(limit)))
+
+    return loaded_records
+
+
+data_file = "dataset_records.txt"
+
+try:
+    with open(data_file, "x") as file:
+        file.write("survey_2026,1187,1200\n")
+        file.write("sales_data,1250,1200\n")
+        file.write("customer_data,950,1000\n")
+except FileExistsError:
+    pass
+
+records = load_records(data_file)
 
 
 # ==================================================================== OUTPUT
@@ -55,9 +91,17 @@ for record in records:
     print(f"  RECORD CHECK  -  {record.label}")
     print("=" * 34)
 
-    # your report lines go here
+    print(f"  Value       : {record.value}")
+    print(f"  Limit       : {record.limit}")
+    status = record.status()
+    print(f"  Status      : {status}")
+
+    if status == "OVER LIMIT":
+        Record.over_limit_count += 1
 
     print("=" * 34)
+
+print(f"Total records OVER LIMIT: {Record.over_limit_count}")
 
 
 # ==========================================================================

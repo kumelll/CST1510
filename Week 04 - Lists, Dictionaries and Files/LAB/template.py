@@ -1,3 +1,4 @@
+
 """
 RECORD CHECK  -  my version
 ===========================
@@ -19,7 +20,28 @@ Delete these instructions as you replace them with your code.
 #    nothing outside it should contain a print() of its own. Give each a
 #    one-line docstring.
 
-# your function(s) go here
+def check_record(value, limit):
+    """Calculate the difference, percentage and status of a record."""
+    difference = limit - value
+    percent = (value / limit) * 100
+
+    if value > limit:
+        status = "OVER LIMIT"
+    else:
+        status = "OK"
+
+    return difference, percent, status
+
+
+def print_report(label, value, limit, difference, percent, status):
+    """Print the complete report for one record."""
+    print(f"Label: {label}")
+    print(f"Value: {value}")
+    print(f"Limit: {limit}")
+    print(f"Difference: {difference}")
+    print(f"Percentage: {percent:.2f}%")
+    print(f"Status: {status}")
+    print("-" * 30)
 
 
 # ====================================================================== STORE
@@ -33,7 +55,28 @@ Delete these instructions as you replace them with your code.
 #    Excellent : also write the results out to a new file (one line per
 #                record: label, status), as well as printing them.
 
-records = []   # replace with your code
+def load_records(path):
+    """Load records from a file and return a list of dictionaries."""
+    records = []
+
+    with open(path, "r") as file:
+        for line in file:
+            label, value, limit = line.strip().split(",")
+
+            records.append({
+                "label": label,
+                "value": float(value),
+                "limit": float(limit)
+            })
+
+    return records
+
+
+try:
+    records = load_records("records_data.txt")
+except FileNotFoundError:
+    print("Error: records_data.txt was not found.")
+    records = []
 
 
 # =============================================================== PROCESS + OUTPUT
@@ -42,7 +85,40 @@ records = []   # replace with your code
 #    Excellent : also keep a running count of how many were OVER LIMIT, and
 #                print that once, after the loop ends.
 
-# your loop goes here
+results = []
+over_limit_count = 0
+
+for record in records:
+    difference, percent, status = check_record(
+        record["value"],
+        record["limit"]
+    )
+
+    print_report(
+        record["label"],
+        record["value"],
+        record["limit"],
+        difference,
+        percent,
+        status
+    )
+
+    results.append((record["label"], status))
+
+    if status == "OVER LIMIT":
+        over_limit_count += 1
+
+
+# Write the results to a new file
+with open("results.txt", "w") as file:
+    for label, status in results:
+        file.write(f"{label},{status}\n")
+
+
+# Print the final count after the loop
+print(f"Total records: {len(records)}")
+print(f"Records OVER LIMIT: {over_limit_count}")
+print("Results saved to results.txt")
 
 
 # ==========================================================================
