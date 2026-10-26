@@ -36,7 +36,12 @@ def multiply(n1,n2):
     return n1*n2
 
 def divide(n1,n2):
-    return n1/n2
+    
+    try:
+        return n1/n2
+    except ZeroDivisionError:
+            print("cant divide by 0")
+            return None
 
 n1=float(input("Enter 1st value : "))
 
@@ -57,6 +62,8 @@ while keep_going:
 
     elif operator=="/":
         result= divide(n1,n2)
+
+        
 
     print(f"{n1}{operator}{n2} = {result}")
 
